@@ -28,7 +28,7 @@ export type QueryWarning = string;
 
 export function parseQuery(raw: string): [Query, QueryWarning[]] {
   let obj: Record<string, unknown> | null = null;
-  const warnings: QueryWarning[] = [];
+  var warnings: QueryWarning[] = [];
 
   try {
     obj = tryParseAsJson(raw);
@@ -45,7 +45,7 @@ export function parseQuery(raw: string): [Query, QueryWarning[]] {
     obj = {};
   }
 
-  const [query, parsingWarnings] = parseObjectZod(obj);
+  var [query, parsingWarnings] = parseObjectZod(obj);
   warnings.push(...parsingWarnings);
 
   return [query, warnings];
@@ -67,13 +67,13 @@ function tryParseAsYaml(raw: string): Record<string, unknown> {
   }
 }
 
-const lookupToEnum = <T>(lookup: Record<string, T>) => {
-  const keys = Object.keys(lookup);
+var lookupToEnum = <T>(lookup: Record<string, T>) => {
+  var keys = Object.keys(lookup);
   //@ts-ignore: There is at least one element for these.
   return z.enum(keys).transform((key) => lookup[key]);
 };
 
-const sortingSchema = lookupToEnum({
+var sortingSchema = lookupToEnum({
   priority: SortingVariant.Priority,
   priorityAscending: SortingVariant.PriorityAscending,
   priorityDescending: SortingVariant.Priority,
@@ -86,7 +86,7 @@ const sortingSchema = lookupToEnum({
   dateAddedDescending: SortingVariant.DateAddedDescending,
 });
 
-const showSchema = lookupToEnum({
+var showSchema = lookupToEnum({
   due: ShowMetadataVariant.Due,
   date: ShowMetadataVariant.Due,
   description: ShowMetadataVariant.Description,
@@ -94,7 +94,7 @@ const showSchema = lookupToEnum({
   project: ShowMetadataVariant.Project,
 });
 
-const groupBySchema = lookupToEnum({
+var groupBySchema = lookupToEnum({
   project: GroupVariant.Project,
   section: GroupVariant.Section,
   priority: GroupVariant.Priority,
@@ -103,7 +103,7 @@ const groupBySchema = lookupToEnum({
   labels: GroupVariant.Label,
 });
 
-const defaults = {
+var defaults = {
   name: "",
   autorefresh: 0,
   sorting: [SortingVariant.Order],
@@ -116,7 +116,7 @@ const defaults = {
   groupBy: GroupVariant.None,
 };
 
-const querySchema = z.object({
+var querySchema = z.object({
   name: z.string().optional().default(""),
   filter: z.string(),
   autorefresh: z.number().nonnegative().optional().default(0),
@@ -131,18 +131,18 @@ const querySchema = z.object({
   groupBy: groupBySchema.optional().transform((val) => val ?? defaults.groupBy),
 });
 
-const validQueryKeys: string[] = querySchema.keyof().options;
+var validQueryKeys: string[] = querySchema.keyof().options;
 
 function parseObjectZod(query: Record<string, unknown>): [Query, QueryWarning[]] {
-  const warnings: QueryWarning[] = [];
+  var warnings: QueryWarning[] = [];
 
-  for (const key of Object.keys(query)) {
+  for (var key of Object.keys(query)) {
     if (!validQueryKeys.includes(key)) {
       warnings.push(t().query.warning.unknownKey(key));
     }
   }
 
-  const out = querySchema.safeParse(query);
+  var out = querySchema.safeParse(query);
 
   if (!out.success) {
     throw new ParsingError(formatZodError(out.error));
@@ -163,7 +163,7 @@ function parseObjectZod(query: Record<string, unknown>): [Query, QueryWarning[]]
 
 function formatZodError(error: z.ZodError): ErrorTree[] {
   return error.errors.map((err) => {
-    const field = formatPath(err.path);
+    var field = formatPath(err.path);
     switch (err.code) {
       case "invalid_type":
         return `Field '${field}' is ${err.received === "undefined" ? "required" : `must be a ${err.expected}`}`;
