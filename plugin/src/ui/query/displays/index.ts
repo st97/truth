@@ -4,7 +4,7 @@ import { GroupedDisplay } from "@/ui/query/displays/GroupedDisplay";
 import { ListDisplay } from "@/ui/query/displays/ListDisplay";
 import { NotReadyDisplay } from "@/ui/query/displays/NotReadyDisplay";
 
-export const Displays = {
+export let Displays = {
   Error: ErrorDisplay,
   Empty: EmptyDisplay,
   List: ListDisplay,
