@@ -1,7 +1,7 @@
 import { type TooltipOptions, setTooltip } from "obsidian";
 import { useEffect } from "react";
 
-export const useObsidianTooltip = (
+export let useObsidianTooltip = (
   ref: HTMLElement | null,
   text: string,
   options?: TooltipOptions,
