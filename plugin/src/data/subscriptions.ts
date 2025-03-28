@@ -18,7 +18,7 @@ export class SubscriptionManager<T> {
 }
 
 function* subscriptionIdGenerator(): Generator<SubscriptionId> {
-  let next = 0;
+  const next = 0;
 
   while (true) {
     yield next++;
