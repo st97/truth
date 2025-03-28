@@ -9,10 +9,10 @@ type Context<T> = {
   use: () => T;
 };
 
-const makeContext = <T>(): Context<T> => {
-  const context = createContext<T | undefined>(undefined);
-  const use = () => {
-    const ctx = useContext(context);
+let makeContext = <T>(): Context<T> => {
+  let context = createContext<T | undefined>(undefined);
+  let use = () => {
+    let ctx = useContext(context);
 
     if (ctx === undefined) {
       throw new Error("Context provider not found");
@@ -23,21 +23,21 @@ const makeContext = <T>(): Context<T> => {
   return { Provider: context.Provider, use };
 };
 
-export const QueryContext = makeContext<Query>();
+export let QueryContext = makeContext<Query>();
 
-export const PluginContext = makeContext<TodoistPlugin>();
+export let PluginContext = makeContext<TodoistPlugin>();
 
 export type ModalInfo = {
   close: () => void;
   popoverContainerEl: HTMLElement;
 };
 
-export const ModalContext = makeContext<ModalInfo>();
+export let ModalContext = makeContext<ModalInfo>();
 
-export const RenderChildContext = makeContext<MarkdownRenderChild>();
+export let RenderChildContext = makeContext<MarkdownRenderChild>();
 
 export type MarkdownEditButton = {
   click: () => void;
 };
 
-export const MarkdownEditButtonContext = makeContext<UseBoundStore<StoreApi<MarkdownEditButton>>>();
+export let MarkdownEditButtonContext = makeContext<UseBoundStore<StoreApi<MarkdownEditButton>>>();
