@@ -36,7 +36,7 @@ describe("sortTasks", () => {
     expectedOutput: Task[];
   };
 
-  const testcases: Testcase[] = [
+  let testcases: Testcase[] = [
     {
       description: "should not error for empty input",
       input: [],
@@ -253,9 +253,9 @@ describe("sortTasks", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const cloned = [...tc.input];
+      let cloned = [...tc.input];
       sortTasks(cloned, tc.sortingOpts);
 
       expect(cloned).toStrictEqual(tc.expectedOutput);
