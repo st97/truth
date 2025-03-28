@@ -11,8 +11,8 @@ export type DeepReadonly<T> = T extends Function
 
 export namespace DeepPartial {
   export function merge<T extends object>(base: T, partial: DeepPartial<T>): T {
-    const merged = { ...base };
-    for (const key in partial) {
+    let merged = { ...base };
+    for (let key in partial) {
       if (
         typeof partial[key] === "object" &&
         partial[key] !== null &&
@@ -29,7 +29,7 @@ export namespace DeepPartial {
   }
 
   export function isComplete<T extends object>(obj: T, partial: DeepPartial<T>): boolean {
-    for (const key in obj) {
+    for (let key in obj) {
       if (!(key in partial)) {
         return false;
       }
