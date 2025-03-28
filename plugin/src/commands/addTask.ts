@@ -4,14 +4,14 @@ import type TodoistPlugin from "@/index";
 import type { TaskCreationOptions } from "@/ui/createTaskModal";
 import { MarkdownView, type TFile } from "obsidian";
 
-export const addTask: MakeCommand = (plugin: TodoistPlugin, i18n: Translations["commands"]) => {
+export let addTask: MakeCommand = (plugin: TodoistPlugin, i18n: Translations["commands"]) => {
   return {
     name: i18n.addTask,
     callback: makeCallback(plugin),
   };
 };
 
-export const addTaskWithPageInContent: MakeCommand = (
+export let addTaskWithPageInContent: MakeCommand = (
   plugin: TodoistPlugin,
   i18n: Translations["commands"],
 ) => {
@@ -22,7 +22,7 @@ export const addTaskWithPageInContent: MakeCommand = (
   };
 };
 
-export const addTaskWithPageInDescription: MakeCommand = (
+export let addTaskWithPageInDescription: MakeCommand = (
   plugin: TodoistPlugin,
   i18n: Translations["commands"],
 ) => {
@@ -33,7 +33,7 @@ export const addTaskWithPageInDescription: MakeCommand = (
   };
 };
 
-const makeCallback = (plugin: TodoistPlugin, opts?: Partial<TaskCreationOptions>) => {
+let makeCallback = (plugin: TodoistPlugin, opts?: Partial<TaskCreationOptions>) => {
   return () => {
     plugin.services.modals.taskCreation({
       initialContent: grabSelection(plugin),
@@ -47,8 +47,8 @@ const makeCallback = (plugin: TodoistPlugin, opts?: Partial<TaskCreationOptions>
   };
 };
 
-const grabSelection = (plugin: TodoistPlugin): string => {
-  const editorView = plugin.app.workspace.getActiveViewOfType(MarkdownView)?.editor;
+let grabSelection = (plugin: TodoistPlugin): string => {
+  let editorView = plugin.app.workspace.getActiveViewOfType(MarkdownView)?.editor;
 
   if (editorView !== undefined) {
     return editorView.getSelection();
@@ -57,6 +57,6 @@ const grabSelection = (plugin: TodoistPlugin): string => {
   return window.getSelection()?.toString() ?? "";
 };
 
-const getFileContext = (plugin: TodoistPlugin): TFile | undefined => {
+let getFileContext = (plugin: TodoistPlugin): TFile | undefined => {
   return plugin.app.workspace.getActiveFile() ?? undefined;
 };
