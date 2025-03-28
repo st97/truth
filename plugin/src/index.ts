@@ -19,7 +19,7 @@ export default class TodoistPlugin extends Plugin {
   }
 
   async onload() {
-    const queryInjector = new QueryInjector(this);
+    let queryInjector = new QueryInjector(this);
     this.registerMarkdownCodeBlockProcessor(
       "todoist",
       queryInjector.onNewBlock.bind(queryInjector),
@@ -37,10 +37,10 @@ export default class TodoistPlugin extends Plugin {
   }
 
   private async loadApiClient(): Promise<void> {
-    const accessor = this.services.token;
+    let accessor = this.services.token;
 
     if (await accessor.exists()) {
-      const token = await accessor.read();
+      let token = await accessor.read();
       await this.services.todoist.initialize(new TodoistApiClient(token, new ObsidianFetcher()));
       return;
     }
@@ -54,7 +54,7 @@ export default class TodoistPlugin extends Plugin {
   }
 
   async loadOptions(): Promise<void> {
-    const options = await this.loadData();
+    let options = await this.loadData();
 
     useSettingsStore.setState((old) => {
       return {
