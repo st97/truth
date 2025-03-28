@@ -78,7 +78,7 @@ export class TodoistAdapter {
     await this.sections.sync();
     await this.labels.sync();
 
-    for (let subscription of this.subscriptions.list()) {
+    for (const subscription of this.subscriptions.list()) {
       await subscription.update();
     }
 
@@ -94,8 +94,8 @@ export class TodoistAdapter {
   }
 
   public subscribe(query: string, callback: OnSubscriptionChange): [UnsubscribeCallback, Refresh] {
-    let fetcher = this.buildQueryFetcher(query);
-    let subscription = new Subscription(callback, fetcher, () => true);
+    const fetcher = this.buildQueryFetcher(query);
+    const subscription = new Subscription(callback, fetcher, () => true);
     return [this.subscriptions.subscribe(subscription), subscription.update];
   }
 
@@ -104,19 +104,19 @@ export class TodoistAdapter {
       if (!this.api.hasValue()) {
         return undefined;
       }
-      let data = await this.api.withInner((api) => api.getTasks(query));
-      let hydrated = data.map((t) => this.hydrate(t));
+      const data = await this.api.withInner((api) => api.getTasks(query));
+      const hydrated = data.map((t) => this.hydrate(t));
       return hydrated;
     };
   }
 
   private hydrate(apiTask: ApiTask): Task {
-    let project = this.projects.byId(apiTask.projectId);
-    let section = apiTask.sectionId
+    const project = this.projects.byId(apiTask.projectId);
+    const section = apiTask.sectionId
       ? (this.sections.byId(apiTask.sectionId) ?? makeUnknownSection(apiTask.sectionId))
       : undefined;
 
-    let labels = apiTask.labels.map((id) => this.labels.byName(id) ?? makeUnknownLabel());
+    const labels = apiTask.labels.map((id) => this.labels.byName(id) ?? makeUnknownLabel());
 
     return {
       id: apiTask.id,
@@ -140,7 +140,7 @@ export class TodoistAdapter {
   private async closeTask(id: TaskId): Promise<void> {
     this.tasksPendingClose.push(id);
 
-    for (let subscription of this.subscriptions.list()) {
+    for (const subscription of this.subscriptions.list()) {
       subscription.callback();
     }
 
@@ -148,13 +148,13 @@ export class TodoistAdapter {
       this.api.withInner((api) => api.closeTask(id));
       this.tasksPendingClose.remove(id);
 
-      for (let subscription of this.subscriptions.list()) {
+      for (const subscription of this.subscriptions.list()) {
         subscription.remove(id);
       }
     } catch (error: unknown) {
       this.tasksPendingClose.remove(id);
 
-      for (let subscription of this.subscriptions.list()) {
+      for (const subscription of this.subscriptions.list()) {
         subscription.callback();
       }
 
@@ -163,7 +163,7 @@ export class TodoistAdapter {
   }
 }
 
-let makeUnknownProject = (id: string): Project => {
+const makeUnknownProject = (id: string): Project => {
   return {
     id,
     parentId: null,
@@ -174,7 +174,7 @@ let makeUnknownProject = (id: string): Project => {
   };
 };
 
-let makeUnknownSection = (id: string): Section => {
+const makeUnknownSection = (id: string): Section => {
   return {
     id,
     projectId: "unknown-project",
@@ -183,7 +183,7 @@ let makeUnknownSection = (id: string): Section => {
   };
 };
 
-let makeUnknownLabel = (): Label => {
+const makeUnknownLabel = (): Label => {
   return {
     id: "unknown-label",
     name: "Unknown Label",
@@ -212,7 +212,7 @@ class Subscription {
 
   public update = async () => {
     try {
-      let data = await this.fetch();
+      const data = await this.fetch();
       if (data === undefined) {
         this.result = { type: "not-ready" };
       } else {
@@ -221,7 +221,7 @@ class Subscription {
     } catch (error: unknown) {
       console.error(`Failed to refresh task query: ${error}`);
 
-      let result: SubscriptionResult = {
+      const result: SubscriptionResult = {
         type: "error",
         kind: QueryErrorKind.Unknown,
       };
@@ -245,7 +245,7 @@ class Subscription {
 
   public callback = () => {
     // Apply filtering, without mutating the actual state of the result.
-    let result = { ...this.result };
+    const result = { ...this.result };
     if (result.type === "success") {
       result.tasks = result.tasks.filter(this.filter);
     }
