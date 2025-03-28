@@ -30,8 +30,8 @@ export function groupBy(tasks: Task[], groupBy: GroupVariant): GroupedTasks[] {
 }
 
 function groupByPriority(tasks: Task[]): GroupedTasks[] {
-  const priorities = partitionBy(tasks, (task: Task) => task.priority);
-  const groups = Array.from(priorities.entries());
+  let priorities = partitionBy(tasks, (task: Task) => task.priority);
+  let groups = Array.from(priorities.entries());
   // We need to 'reverse' sort since priority of 4 is actually
   // priority 1 in Todoist.
   groups.sort((a, b) => b[0] - a[0]);
@@ -44,7 +44,7 @@ function groupByPriority(tasks: Task[]): GroupedTasks[] {
   });
 }
 
-const priorityHeaderLookup: Record<Priority, string> = {
+let priorityHeaderLookup: Record<Priority, string> = {
   1: "Priority 4",
   2: "Priority 3",
   3: "Priority 2",
@@ -52,11 +52,11 @@ const priorityHeaderLookup: Record<Priority, string> = {
 };
 
 function groupByProject(tasks: Task[]): GroupedTasks[] {
-  const projects = partitionBy(tasks, (task: Task) => task.project);
-  const groups = Array.from(projects.entries());
+  let projects = partitionBy(tasks, (task: Task) => task.project);
+  let groups = Array.from(projects.entries());
   groups.sort((a, b) => {
-    const aProject = a[0];
-    const bProject = b[0];
+    let aProject = a[0];
+    let bProject = b[0];
     return aProject.order - bProject.order;
   });
 
@@ -74,9 +74,9 @@ function groupBySection(tasks: Task[]): GroupedTasks[] {
     section: Section | undefined;
   };
 
-  const makeHeader = (key: SectionPartitionKey) => {
-    const project = key.project.name;
-    const section = key.section?.name;
+  let makeHeader = (key: SectionPartitionKey) => {
+    let project = key.project.name;
+    let section = key.section?.name;
 
     if (section === undefined) {
       return project;
@@ -85,17 +85,17 @@ function groupBySection(tasks: Task[]): GroupedTasks[] {
     return `${project} / ${section}`;
   };
 
-  const sections = partitionBy<string>(tasks, (task: Task) => {
-    const key: SectionPartitionKey = { project: task.project, section: task.section };
+  let sections = partitionBy<string>(tasks, (task: Task) => {
+    let key: SectionPartitionKey = { project: task.project, section: task.section };
     return JSON.stringify(key);
   });
-  const groups = Array.from(sections.entries());
+  let groups = Array.from(sections.entries());
   groups.sort((a, b) => {
-    const aKey: SectionPartitionKey = JSON.parse(a[0]);
-    const bKey: SectionPartitionKey = JSON.parse(b[0]);
+    let aKey: SectionPartitionKey = JSON.parse(a[0]);
+    let bKey: SectionPartitionKey = JSON.parse(b[0]);
 
     // First compare by project
-    const projectOrderDiff = aKey.project.order - bKey.project.order;
+    let projectOrderDiff = aKey.project.order - bKey.project.order;
     if (projectOrderDiff !== 0) {
       return projectOrderDiff;
     }
@@ -125,8 +125,8 @@ function groupBySection(tasks: Task[]): GroupedTasks[] {
 }
 
 function groupByDate(tasks: Task[]): GroupedTasks[] {
-  const i18n = t().query.groupedHeaders;
-  const makeHeader = (date: string | undefined): string => {
+  let i18n = t().query.groupedHeaders;
+  let makeHeader = (date: string | undefined): string => {
     if (date === undefined) {
       return i18n.noDueDate;
     }
@@ -138,7 +138,7 @@ function groupByDate(tasks: Task[]): GroupedTasks[] {
     return formatAsHeader(new DueDate({ isRecurring: false, date }));
   };
 
-  const dates = partitionBy(tasks, (task: Task) => {
+  let dates = partitionBy(tasks, (task: Task) => {
     if (task.due?.date === undefined) {
       return undefined;
     }
@@ -149,10 +149,10 @@ function groupByDate(tasks: Task[]): GroupedTasks[] {
 
     return task.due.date;
   });
-  const groups = Array.from(dates.entries());
+  let groups = Array.from(dates.entries());
   groups.sort((a, b) => {
-    const aDate = a[0];
-    const bDate = b[0];
+    let aDate = a[0];
+    let bDate = b[0];
 
     if (aDate === undefined && bDate === undefined) {
       return 0;
@@ -189,11 +189,11 @@ function groupByDate(tasks: Task[]): GroupedTasks[] {
 }
 
 function groupByLabel(tasks: Task[]): GroupedTasks[] {
-  const labels = partitionByMany(tasks, (task: Task) => task.labels);
-  const groups = Array.from(labels.entries());
+  let labels = partitionByMany(tasks, (task: Task) => task.labels);
+  let groups = Array.from(labels.entries());
   groups.sort((a, b) => {
-    const aLabel = a[0];
-    const bLabel = b[0];
+    let aLabel = a[0];
+    let bLabel = b[0];
 
     if (aLabel === undefined && bLabel === undefined) {
       return 0;
@@ -218,10 +218,10 @@ function groupByLabel(tasks: Task[]): GroupedTasks[] {
 }
 
 function partitionBy<T>(tasks: Task[], selector: (task: Task) => T): Map<T, Task[]> {
-  const mapped = new Map<T, Task[]>();
+  let mapped = new Map<T, Task[]>();
 
-  for (const task of tasks) {
-    const key = selector(task);
+  for (let task of tasks) {
+    let key = selector(task);
 
     if (!mapped.has(key)) {
       mapped.set(key, []);
@@ -237,9 +237,9 @@ function partitionByMany<T>(
   tasks: Task[],
   selector: (task: Task) => T[],
 ): Map<T | undefined, Task[]> {
-  const mapped = new Map<T | undefined, Task[]>();
+  let mapped = new Map<T | undefined, Task[]>();
 
-  const insertTask = (key: T | undefined, task: Task) => {
+  let insertTask = (key: T | undefined, task: Task) => {
     if (!mapped.has(key)) {
       mapped.set(key, []);
     }
@@ -247,14 +247,14 @@ function partitionByMany<T>(
     mapped.get(key)?.push(task);
   };
 
-  for (const task of tasks) {
-    const keys = selector(task);
+  for (let task of tasks) {
+    let keys = selector(task);
 
     if (keys.length === 0) {
       insertTask(undefined, task);
     }
 
-    for (const key of keys) {
+    for (let key of keys) {
       insertTask(key, task);
     }
   }
