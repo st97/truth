@@ -18,7 +18,7 @@ type TestCase = {
 };
 
 describe("hasTime", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be false for just date",
       input: {
@@ -38,17 +38,17 @@ describe("hasTime", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const hasTime = info.hasTime();
+      let info = new DueDate(tc.input);
+      let hasTime = info.hasTime();
       expect(hasTime).toEqual(tc.expected);
     });
   }
 });
 
 describe("isToday", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be false for different day",
       input: {
@@ -76,17 +76,17 @@ describe("isToday", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const isToday = info.isToday();
+      let info = new DueDate(tc.input);
+      let isToday = info.isToday();
       expect(isToday).toEqual(tc.expected);
     });
   }
 });
 
 describe("isOverdue", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be false if date in future",
       input: {
@@ -131,17 +131,17 @@ describe("isOverdue", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const isOverdue = info.isOverdue();
+      let info = new DueDate(tc.input);
+      let isOverdue = info.isOverdue();
       expect(isOverdue).toEqual(tc.expected);
     });
   }
 });
 
 describe("isTomorrow", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be false for same day",
       input: {
@@ -177,17 +177,17 @@ describe("isTomorrow", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const isTomorrow = info.isTomorrow();
+      let info = new DueDate(tc.input);
+      let isTomorrow = info.isTomorrow();
       expect(isTomorrow).toEqual(tc.expected);
     });
   }
 });
 
 describe("isYesterday", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be true for day before",
       input: {
@@ -258,17 +258,17 @@ describe("isYesterday", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const isTomorrow = info.isYesterday();
+      let info = new DueDate(tc.input);
+      let isTomorrow = info.isYesterday();
       expect(isTomorrow).toEqual(tc.expected);
     });
   }
 });
 
 describe("isInLastWeek", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be true for day in last week",
       input: {
@@ -339,17 +339,17 @@ describe("isInLastWeek", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const isTomorrow = info.isInLastWeek();
+      let info = new DueDate(tc.input);
+      let isTomorrow = info.isInLastWeek();
       expect(isTomorrow).toEqual(tc.expected);
     });
   }
 });
 
 describe("isInNextWeek", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be false for any previous day",
       input: {
@@ -420,17 +420,17 @@ describe("isInNextWeek", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const isTomorrow = info.isInNextWeek();
+      let info = new DueDate(tc.input);
+      let isTomorrow = info.isInNextWeek();
       expect(isTomorrow).toEqual(tc.expected);
     });
   }
 });
 
 describe("isCurrentYear", () => {
-  const testcases: TestCase[] = [
+  let testcases: TestCase[] = [
     {
       description: "should be true for current year",
       input: {
@@ -484,10 +484,10 @@ describe("isCurrentYear", () => {
     },
   ];
 
-  for (const tc of testcases) {
+  for (let tc of testcases) {
     it(tc.description, () => {
-      const info = new DueDate(tc.input);
-      const isTomorrow = info.isCurrentYear();
+      let info = new DueDate(tc.input);
+      let isTomorrow = info.isCurrentYear();
       expect(isTomorrow).toEqual(tc.expected);
     });
   }
