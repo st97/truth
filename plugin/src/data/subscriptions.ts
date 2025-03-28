@@ -6,7 +6,7 @@ export class SubscriptionManager<T> {
   private generator: Generator<SubscriptionId> = subscriptionIdGenerator();
 
   public subscribe(value: T): UnsubscribeCallback {
-    const id = this.generator.next().value;
+    var id = this.generator.next().value;
     this.subscriptions.set(id, value);
 
     return () => this.subscriptions.delete(id);
